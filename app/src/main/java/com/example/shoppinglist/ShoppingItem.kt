@@ -1,5 +1,8 @@
 package com.example.shoppinglist
 
-class ShoppingItem {
+import androidx.room.Entity
+
+@Entity(tableName = "shopping_items")
+data class ShoppingItem {
 
 }
