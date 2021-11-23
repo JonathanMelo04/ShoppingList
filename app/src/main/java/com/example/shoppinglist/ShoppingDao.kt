@@ -1,6 +1,7 @@
 package com.example.shoppinglist
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 
@@ -8,6 +9,9 @@ import androidx.room.OnConflictStrategy
 interface ShoppingDao {
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-fun upsert(item: ShoppingItem)
+  suspend fun upsert(item: ShoppingItem)
+
+  @Delete
+  suspend fun delete(item: ShoppingItem)
 
 }
