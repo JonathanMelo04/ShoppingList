@@ -1,10 +1,13 @@
 package com.example.shoppinglist.other
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shoppinglist.R
 import com.example.shoppinglist.data.db.entities.ShoppingItem
 import com.example.shoppinglist.ui.shoppinglist.ShoppingViewModel
+import kotlinx.android.synthetic.main.shopping_item.view.*
 
 class ShoppingItemAdapter(
     var items: List<ShoppingItem>,
@@ -12,15 +15,35 @@ class ShoppingItemAdapter(
 ): RecyclerView.Adapter<ShoppingItemAdapter.ShoppingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShoppingViewHolder {
-        TODO("Not yet implemented")
-    }
-
-    override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
-        TODO("Not yet implemented")
+       val view = LayoutInflater.from(parent.context).inflate(R.layout.shopping_item, parent, false)
+        return ShoppingViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        return items.size
+    }
+
+    override fun onBindViewHolder(holder: ShoppingViewHolder, position: Int) {
+        val curShoppingItem = items[position]
+
+        holder.itemView.tvName.text = curShoppingItem.name
+        holder.itemView.tvAmount.text = "${curShoppingItem.amount}"
+
+        holder.itemView.ivDelete.setOnClickListener {
+            viewModel.delete(curShoppingItem)
+        }
+
+        holder.itemView.ivPlus.setOnClickListener {
+            curShoppingItem.amount++
+            viewModel.upsert(curShoppingItem)
+        }
+
+        holder.itemView.ivMinus.setOnClickListener {
+            if(curShoppingItem.amount > 0) {
+                curShoppingItem.amount--
+                viewModel.upsert(curShoppingItem)
+            }
+        }
     }
 
     inner class ShoppingViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
